@@ -1,5 +1,5 @@
 {
-  "title": "OmaWeather", "settings": "Settings", "close": "Close settings", "refresh": "Refresh now",
+  "title": "ElMeGGa OmaWeather", "settings": "Settings", "close": "Close settings", "refresh": "Refresh now",
   "clear": "Clear", "partly": "Partly cloudy", "cloudy": "Cloudy", "fog": "Fog",
   "storm": "Thunderstorm", "snow": "Snow", "rain": "Rain", "unknown": "No weather data",
   "loading": "Fetching weather…", "failed": "Could not refresh. Try again.",
@@ -37,5 +37,11 @@
   "oma.blurFailed": "Showing glass. Hyprland backdrop blur is unavailable.",
   "oma.settings": "Settings",
   "oma.closeSettings": "Close settings",
-  "oma.appearance": "Appearance"
+  "oma.appearance": "Appearance",
+  "enableForecastNotices": "Forecast notices",
+  "forecastNoticeTitle": "Forecast notices",
+  "forecastNoticeNote": "Open-Meteo forecast. Check official warnings for your area.",
+  "forecastStorm": "Thunderstorm forecast · %1",
+  "forecastHail": "Thunderstorm with hail forecast · %1",
+  "forecastHeavyRain": "Heavy rain forecast · %1"
 }

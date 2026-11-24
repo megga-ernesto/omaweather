@@ -1,10 +1,12 @@
-# OmaWeather
+# ElMeGGa OmaWeather
 
 Clima para la barra de Omarchy. Consulta las condiciones actuales, las próximas 24 horas, el pronóstico de cinco días y detalles como viento, humedad y radiación UV. Está disponible en español e inglés.
 
-![OmaWeather en Base, Cristal y Blur](preview.png)
+![ElMeGGa OmaWeather con su panel y funciones principales](preview.png)
 
-*Paneles renderizados con datos de ejemplo y la paleta Rubí OLED. El desenfoque del fondo está simulado en la captura.*
+*Las capturas usan datos de ejemplo y la paleta Rubí OLED. La comparativa simula el desenfoque del fondo.*
+
+[Comparar Base, Cristal y Blur](docs/appearance-finishes.webp) · [ElMeGGa OmaDesktop](https://github.com/megga-ernesto/ElMeGGa-OmaDesktop)
 
 ## Funciones
 
@@ -14,6 +16,7 @@ Clima para la barra de Omarchy. Consulta las condiciones actuales, las próximas
 - Detalles de sensación térmica, humedad, viento, ráfagas, presión, nubosidad, visibilidad, UV, precipitación, amanecer y atardecer.
 - Búsqueda de ciudades, actualización manual y consultas automáticas opcionales cada 5, 15, 30 o 60 minutos.
 - Interfaz en español e inglés, hora local del dato y última lectura disponible si falla una consulta.
+- Avisos opcionales de pronóstico para tormentas eléctricas, tormentas con granizo y lluvia intensa.
 
 ## Instalación y uso
 
@@ -24,6 +27,10 @@ omarchy plugin add https://github.com/megga-ernesto/omaweather.git --enable
 ```
 
 Abre el panel desde la barra y pulsa el engranaje. En **Ubicación** busca una ciudad y selecciona un resultado. En **Actualización** elige si deseas consultas en segundo plano y con qué frecuencia. El botón de actualizar del panel permite consultar al momento.
+
+Activa **Avisos de pronóstico** en **Ajustes → Actualización**. Los avisos aparecen en el panel y como notificación de escritorio si `notify-send` está disponible. Se basan en las condiciones actuales y las próximas 24 horas de Open-Meteo. Con la actualización en segundo plano activada, el pronóstico se revisa aunque el panel esté cerrado. Para alertas oficiales, consulta el servicio meteorológico de tu localidad.
+
+![Pronóstico de cinco días con aviso de tormenta de ejemplo](docs/forecast-five-days.webp)
 
 ## Apariencia
 
@@ -63,4 +70,4 @@ Para probarlo en Quattro, copia los archivos del plugin, incluida la carpeta `i1
 
 ## Créditos y licencia
 
-Pronósticos y búsqueda de ciudades por [Open-Meteo](https://open-meteo.com/). Los componentes compartidos `Oma*.qml`, `OmaColors.js` y `backdrop.py` conservan su [licencia MIT](docs/mit-shared-components.txt).
+Pronósticos y búsqueda de ciudades por [Open-Meteo](https://open-meteo.com/). El código se distribuye con [licencia MIT](LICENSE).

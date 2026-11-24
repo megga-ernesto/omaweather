@@ -1,17 +1,22 @@
 {
   "schemaVersion": 1,
   "id": "elmegga.omaweather",
-  "name": "OmaWeather",
-  "version": "0.3.0",
+  "name": "ElMeGGa OmaWeather",
+  "version": "0.4.0",
   "author": "ElMeGGa",
-  "description": "Current conditions, 24-hour and five-day forecasts from Open-Meteo.",
-  "kinds": ["bar-widget"],
-  "entryPoints": {"barWidget": "Weather.qml"},
+  "description": "Open-Meteo conditions, 24-hour and five-day forecasts, and optional storm, hail and heavy-rain notices.",
+  "kinds": [
+    "bar-widget"
+  ],
+  "entryPoints": {
+    "barWidget": "Weather.qml"
+  },
   "barWidget": {
-    "displayName": "OmaWeather",
+    "displayName": "ElMeGGa OmaWeather",
     "description": "Current conditions and hourly and daily forecasts.",
     "category": "System",
     "defaultSection": "right",
     "allowMultiple": false
-  }
+  },
+  "license": "MIT"
 }

@@ -18,6 +18,7 @@ Ui.BarWidget {
   readonly property var intervals: [5, 15, 30, 60]
   readonly property int minutes: intervals.includes(setting("minutes", 15)) ? setting("minutes", 15) : 15
   readonly property bool automatic: setting("automatic", true) === true
+  readonly property bool forecastAlerts: setting("forecastAlerts", false) === true
 
   readonly property color ink: Commons.Color.popups.text
   readonly property color background: Commons.Color.popups.background
@@ -35,6 +36,8 @@ Ui.BarWidget {
   property bool configuring: false
   property bool failed: false
   property bool saveFailed: false
+  property var announcedKinds: []
+  readonly property var forecastNotices: forecastAlerts && !failed ? Weather.forecastNotices(report) : []
 
   property string forecastView: "hourly"
   property int hourPage: 0
@@ -67,13 +70,27 @@ Ui.BarWidget {
   }
   function refresh() {
     if (fetch.running) return
-    failed = false
     requested = true
     requestedPlace = placeKey
     fetch.command = ["python3", "-B", decodeURIComponent(scriptFolder) + "weather.py",
       "forecast", String(place.lat), String(place.lon)]
     fetch.running = true
     if (automatic) ticker.restart()
+  }
+  function noticeText(notice) {
+    return strings.t(notice.kind).arg(notice.time.replace("T", " "))
+  }
+  function notifyForecast() {
+    if (!forecastAlerts || failed || !report || !bar) return
+    const widgets = typeof bar.moduleWidgets === "function" ? bar.moduleWidgets(moduleName) : []
+    if (widgets.length && widgets[0] !== root) return
+    const pending = forecastNotices.filter(notice => !announcedKinds.includes(notice.kind))
+    announcedKinds = forecastNotices.map(notice => notice.kind)
+    if (!pending.length) return
+    const body = [place.name, ...pending.map(noticeText), strings.t("forecastNoticeNote")].join("\n")
+    const escaped = body.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+    Quickshell.execDetached(["notify-send", "--app-name=ElMeGGa OmaWeather", "--icon=weather-storm", "--",
+      strings.t("forecastNoticeTitle"), escaped])
   }
   function search(query) {
     if (lookup.running || query.trim().length < 2) return
@@ -95,11 +112,14 @@ Ui.BarWidget {
   function closeForPopoutSwitch() { close() }
 
   onPlaceKeyChanged: {
+    announcedKinds = []
     report = null
     hourPage = 0
     requested = false
     if ((opened || automatic) && bar) refresh()
   }
+  onForecastNoticesChanged: Qt.callLater(notifyForecast)
+  onForecastAlertsChanged: if (!forecastAlerts) announcedKinds = []
   onLastHourPageChanged: hourPage = Math.min(hourPage, lastHourPage)
   onAutomaticChanged: {
     if (automatic && bar) refresh()
@@ -126,6 +146,7 @@ Ui.BarWidget {
       if (code === 0) {
         try {
           root.report = JSON.parse(readings.text)
+          root.failed = false
           return
         } catch (error) {}
       }
@@ -238,7 +259,7 @@ Ui.BarWidget {
     id: button
     anchors.fill: parent
     bar: root.bar
-    tooltipText: strings.t("title")
+    tooltipText: root.forecastNotices.length ? strings.t("forecastNoticeTitle") : strings.t("title")
     hasVisualContent: true
     labelVisible: false
     onPressed: function(mouseButton) {
@@ -252,7 +273,7 @@ Ui.BarWidget {
         horizontalAlignment: Text.AlignHCenter
         anchors.verticalCenter: parent.verticalCenter
         text: Weather.condition(root.report?.code, root.report?.night)[1]
-        color: button.foreground
+        color: root.forecastNotices.length ? Commons.Color.urgent : button.foreground
         font.family: button.fontFamily
         font.pixelSize: Math.min(root.s(14), root.barSize - root.s(6))
       }
@@ -352,6 +373,28 @@ Ui.BarWidget {
                       : strings.t(Weather.condition(root.report?.code, root.report?.night)[0])
                   }
                 }
+              }
+            }
+            OmaGroup {
+              Layout.fillWidth: true
+              visible: root.forecastNotices.length > 0
+              title: strings.t("forecastNoticeTitle")
+              Repeater {
+                model: root.forecastNotices
+                delegate: Label {
+                  required property var modelData
+                  Layout.fillWidth: true
+                  wrapMode: Text.WordWrap
+                  elide: Text.ElideNone
+                  text: root.noticeText(modelData)
+                }
+              }
+              Label {
+                Layout.fillWidth: true
+                wrapMode: Text.WordWrap
+                elide: Text.ElideNone
+                color: root.softInk
+                text: strings.t("forecastNoticeNote")
               }
             }
             RowLayout {
@@ -612,6 +655,20 @@ Ui.BarWidget {
                 text: strings.t("automatic")
                 checked: root.automatic
                 onClicked: if (!root.save("automatic", checked)) checked = Qt.binding(() => root.automatic)
+              }
+              Toggle {
+                Layout.fillWidth: true
+                text: strings.t("enableForecastNotices")
+                checked: root.forecastAlerts
+                onClicked: if (!root.save("forecastAlerts", checked)) checked = Qt.binding(() => root.forecastAlerts)
+              }
+              Label {
+                visible: root.forecastAlerts
+                Layout.fillWidth: true
+                text: strings.t("forecastNoticeNote")
+                wrapMode: Text.WordWrap
+                elide: Text.ElideNone
+                color: root.softInk
               }
               Label { Layout.fillWidth: true; text: strings.t(root.automatic ? "interval" : "manual"); color: root.softInk }
               RowLayout {

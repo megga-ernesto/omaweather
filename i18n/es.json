@@ -1,5 +1,5 @@
 {
-  "title": "OmaWeather", "settings": "Ajustes", "close": "Cerrar ajustes", "refresh": "Actualizar ahora",
+  "title": "ElMeGGa OmaWeather", "settings": "Ajustes", "close": "Cerrar ajustes", "refresh": "Actualizar ahora",
   "clear": "Despejado", "partly": "Parcialmente nublado", "cloudy": "Nublado", "fog": "Niebla",
   "storm": "Tormenta", "snow": "Nieve", "rain": "Lluvia", "unknown": "Sin datos",
   "loading": "Consultando el clima…", "failed": "No se pudo actualizar. Inténtalo de nuevo.",
@@ -37,5 +37,11 @@
   "oma.blurFailed": "Se muestra cristal. El desenfoque de Hyprland no está disponible.",
   "oma.settings": "Ajustes",
   "oma.closeSettings": "Cerrar ajustes",
-  "oma.appearance": "Apariencia"
+  "oma.appearance": "Apariencia",
+  "enableForecastNotices": "Avisos de pronóstico",
+  "forecastNoticeTitle": "Avisos de pronóstico",
+  "forecastNoticeNote": "Estimación de Open-Meteo. Consulta los avisos oficiales de tu localidad.",
+  "forecastStorm": "Tormenta eléctrica prevista · %1",
+  "forecastHail": "Tormenta con granizo prevista · %1",
+  "forecastHeavyRain": "Lluvia intensa prevista · %1"
 }
